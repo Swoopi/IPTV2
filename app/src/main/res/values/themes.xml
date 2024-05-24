@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.IPTV2" parent="@style/Theme.Leanback" />
+</resources>
