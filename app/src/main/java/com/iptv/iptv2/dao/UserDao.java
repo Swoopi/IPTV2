@@ -11,7 +11,7 @@ import com.iptv.iptv2.models.User;
 public class UserDao extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // Updated version to avoid downgrade issues
     private static final String TABLE_USERS = "users";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_USERNAME = "username";
@@ -46,6 +46,12 @@ public class UserDao extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        onCreate(db);
+    }
+
     public void open() {
         if (db == null || !db.isOpen()) {
             db = this.getWritableDatabase();
@@ -72,17 +78,19 @@ public class UserDao extends SQLiteOpenHelper {
                 COLUMN_USERNAME + "=? AND " + COLUMN_PASSWORD + "=?",
                 new String[]{username, password}, null, null, null);
 
-        if (cursor != null) {
-            cursor.moveToFirst();
+        if (cursor != null && cursor.moveToFirst()) {
+            User user = new User(
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD))
+            );
+            cursor.close();
+            return user;
+        } else {
+            if (cursor != null) {
+                cursor.close();
+            }
+            return null;
         }
-
-        User user = new User(
-                cursor.getString(1),
-                cursor.getString(2)
-        );
-
-        cursor.close();
-        return user;
     }
 
     public boolean isUsernameTaken(String username) {

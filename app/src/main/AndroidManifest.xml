@@ -45,6 +45,27 @@
             android:exported="true"
             android:screenOrientation="landscape">
         </activity>
+        <activity
+            android:name=".activities.CategoryActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".activities.LiveTVActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".activities.MoviesActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".activities.ShowsActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+        </activity>
+
 
 
 

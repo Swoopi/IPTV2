@@ -2,39 +2,54 @@ package com.iptv.iptv2.utils;
 
 import com.iptv.iptv2.models.Channel;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class M3UParser {
 
-    private static final Pattern TVG_PATTERN = Pattern.compile("tvg-id=\"([^\"]*)\".*tvg-name=\"([^\"]*)\".*tvg-logo=\"([^\"]*)\".*group-title=\"([^\"]*)\",(.*)");
-
-    public static List<Channel> parseM3U(String m3uContent) {
+    public static List<Channel> parseM3U(String m3uContent) throws Exception {
         List<Channel> channels = new ArrayList<>();
-        String[] lines = m3uContent.split("\n");
+        BufferedReader reader = new BufferedReader(new StringReader(m3uContent));
+        String line;
+        String name = null;
+        String tvgId = null;
+        String tvgName = null;
+        String tvgType = null;
+        String groupTitle = null;
+        String tvgLogo = null;
 
-        for (String line : lines) {
-            Matcher matcher = TVG_PATTERN.matcher(line);
-
-            if (matcher.find()) {
-                String tvgId = matcher.group(1);
-                String tvgName = matcher.group(2);
-                String tvgLogo = matcher.group(3);
-                String groupTitle = matcher.group(4);
-                String name = matcher.group(5);
-                String url = null;
-
-                if (lines.length > 1) {
-                    url = lines[1]; // URL is typically on the next line after the metadata
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("#EXTINF")) {
+                String[] attributes = line.substring(line.indexOf(" ")).split(" ");
+                for (String attribute : attributes) {
+                    if (attribute.startsWith("tvg-id=")) {
+                        tvgId = attribute.substring(8, attribute.length() - 1);
+                    } else if (attribute.startsWith("tvg-name=")) {
+                        tvgName = attribute.substring(10, attribute.length() - 1);
+                    } else if (attribute.startsWith("tvg-type=")) {
+                        tvgType = attribute.substring(10, attribute.length() - 1);
+                    } else if (attribute.startsWith("group-title=")) {
+                        groupTitle = attribute.substring(13, attribute.length() - 1);
+                    } else if (attribute.startsWith("tvg-logo=")) {
+                        tvgLogo = attribute.substring(10, attribute.length() - 1).replace("\"", ""); // Clean up URL
+                    }
                 }
-
-                Channel channel = new Channel(name, url, tvgId, tvgName, tvgLogo, groupTitle);
-                channels.add(channel);
+                int commaIndex = line.indexOf(",");
+                if (commaIndex != -1) {
+                    name = line.substring(commaIndex + 1).trim();
+                }
+            } else if (line.startsWith("http") && name != null) {
+                channels.add(new Channel(name, line.trim(), tvgId, tvgName, tvgType, groupTitle, tvgLogo));
+                name = null;
+                tvgId = null;
+                tvgName = null;
+                tvgType = null;
+                groupTitle = null;
+                tvgLogo = null;
             }
         }
-
         return channels;
     }
 }

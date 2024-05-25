@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.leanback.widget.BrowseFragment
+    <fragment
         android:id="@+id/main_browse_fragment"
+        android:name="androidx.leanback.app.BrowseSupportFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.leanback.widget.BrowseFrameLayout>
