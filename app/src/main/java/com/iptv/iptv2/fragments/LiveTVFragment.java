@@ -1,6 +1,8 @@
 package com.iptv.iptv2.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainFragment extends BrowseSupportFragment {
+public class LiveTVFragment extends BrowseSupportFragment {
 
     private ExecutorService executorService;
     private ChannelDao channelDao;
@@ -54,7 +56,7 @@ public class MainFragment extends BrowseSupportFragment {
 
             HeaderItem header = new HeaderItem(0, "Live TV");
             rowsAdapter.add(new ListRow(header, listRowAdapter));
-            getActivity().runOnUiThread(() -> setAdapter(rowsAdapter));
+            new Handler(Looper.getMainLooper()).post(() -> setAdapter(rowsAdapter));
         });
     }
 }

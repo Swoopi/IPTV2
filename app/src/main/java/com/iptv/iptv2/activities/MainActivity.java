@@ -2,35 +2,39 @@ package com.iptv.iptv2.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import com.iptv.iptv2.R;
-import com.iptv.iptv2.fragments.MainFragment;
 import com.iptv.iptv2.dao.ChannelDao;
+import com.iptv.iptv2.dao.MovieDao;
+import com.iptv.iptv2.dao.ShowDao;
 import com.iptv.iptv2.models.Channel;
+import com.iptv.iptv2.models.Movie;
+import com.iptv.iptv2.models.Show;
 import com.iptv.iptv2.utils.M3UFetcher;
 import com.iptv.iptv2.utils.M3UParser;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private Button btnMovies;
     private Button btnShows;
     private Button btnLiveTV;
     private Button btnUpdate;
-
-    private MainFragment mainFragment;
+    private ExecutorService executorService;
     private ChannelDao channelDao;
+    private MovieDao movieDao;
+    private ShowDao showDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        channelDao = new ChannelDao(this);
 
         btnMovies = findViewById(R.id.btn_movies);
         btnShows = findViewById(R.id.btn_shows);
@@ -41,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         btnShows.setOnClickListener(view -> navigateToCategory("Shows"));
         btnLiveTV.setOnClickListener(view -> navigateToCategory("Live TV"));
         btnUpdate.setOnClickListener(view -> updateContent());
+
+        executorService = Executors.newSingleThreadExecutor();
+        channelDao = ChannelDao.getInstance(this);
+        movieDao = MovieDao.getInstance(this);
+        showDao = ShowDao.getInstance(this);
     }
 
     private void navigateToCategory(String category) {
@@ -62,47 +71,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateContent() {
-        updateDatabase();
-    }
-
-    private void updateDatabase() {
-        new Thread(() -> {
+        executorService.submit(() -> {
             try {
+                Log.d(TAG, "Starting Update");
+                Log.d(TAG, "Clear previous databases");
                 // Clear existing data
                 channelDao.clearChannels();
+                movieDao.clearMovies();
+                showDao.clearShows();
 
                 // Update Live TV
+                Log.d(TAG, "Fetching Channels");
                 String liveTvContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv");
-                List<Channel> liveTvChannels = M3UParser.parseM3U(liveTvContent);
+
+                Log.d(TAG, "Parsing Channels");
+                List<Channel> liveTvChannels = M3UParser.parseM3UForChannels(liveTvContent);
+                Log.d(TAG, "Inserting Channels into database");
                 for (Channel channel : liveTvChannels) {
                     channelDao.insertChannel(channel);
                 }
+                Log.d(TAG, "Updated channels");
+
 
                 // Update Movies
+                Log.d(TAG, "Fetching Movies");
                 String moviesContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/movies");
-                List<Channel> movieChannels = M3UParser.parseM3U(moviesContent);
-                for (Channel channel : movieChannels) {
-                    channelDao.insertChannel(channel);
+
+                Log.d(TAG, "Parsing Movies");
+                List<Movie> movieChannels = M3UParser.parseM3UForMovies(moviesContent);
+                Log.d(TAG, "Inserting Movies into database");
+                for (Movie movie : movieChannels) {
+                    movieDao.insertMovie(movie);
                 }
+                Log.d(TAG, "Updated Movies");
 
                 // Update Shows
+                Log.d(TAG, "Fetching Shows");
                 String showsContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/tvshows");
-                List<Channel> showChannels = M3UParser.parseM3U(showsContent);
-                for (Channel channel : showChannels) {
-                    channelDao.insertChannel(channel);
-                }
 
-                runOnUiThread(() -> {
-                    // Update UI or notify user that the update is complete
-                    Toast.makeText(MainActivity.this, "Content updated successfully", Toast.LENGTH_SHORT).show();
-                });
+                Log.d(TAG, "Parsing Shows");
+                List<Show> showChannels = M3UParser.parseM3UForShows(showsContent);
+                Log.d(TAG, "Inserting Shows into database");
+                for (Show show : showChannels) {
+                    showDao.insertShow(show);
+                }
+                Log.d(TAG, "Updated shows");
+
+
+                Log.d(TAG, "Update complete");
+
             } catch (Exception e) {
-                e.printStackTrace();
-                runOnUiThread(() -> {
-                    // Notify user about the error
-                    Toast.makeText(MainActivity.this, "Failed to update content", Toast.LENGTH_SHORT).show();
-                });
+                Log.e(TAG, "Error during update", e);
             }
-        }).start();
+        });
     }
 }

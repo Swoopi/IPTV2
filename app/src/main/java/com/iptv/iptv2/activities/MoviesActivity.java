@@ -1,15 +1,22 @@
 package com.iptv.iptv2.activities;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.iptv.iptv2.R;
+import com.iptv.iptv2.adapters.MovieAdapter;
+import com.iptv.iptv2.dao.MovieDao;
+import com.iptv.iptv2.models.Movie;
+import java.util.List;
 
 public class MoviesActivity extends AppCompatActivity {
 
     private Button backButton;
+    private RecyclerView recyclerView;
+    private MovieDao movieDao;
+    private MovieAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +24,19 @@ public class MoviesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movies);
 
         backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        recyclerView = findViewById(R.id.movies_recycler_view);
+
+        movieDao = MovieDao.getInstance(this);
+        List<Movie> movies = movieDao.getAllMovies();
+        movieAdapter = new MovieAdapter(movies);
+
+        backButton.setOnClickListener(v -> finish());
+
+        setupRecyclerView();
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(movieAdapter);
     }
 }

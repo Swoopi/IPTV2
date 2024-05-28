@@ -1,6 +1,8 @@
 package com.iptv.iptv2.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
@@ -9,18 +11,18 @@ import androidx.leanback.widget.ListRowPresenter;
 import androidx.core.content.ContextCompat;
 
 import com.iptv.iptv2.R;
-import com.iptv.iptv2.dao.ChannelDao;
-import com.iptv.iptv2.models.Channel;
-import com.iptv.iptv2.presenters.ChannelPresenter;
+import com.iptv.iptv2.dao.ShowDao;
+import com.iptv.iptv2.models.Show;
+import com.iptv.iptv2.presenters.ShowPresenter;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainFragment extends BrowseSupportFragment {
+public class ShowsFragment extends BrowseSupportFragment {
 
     private ExecutorService executorService;
-    private ChannelDao channelDao;
+    private ShowDao showDao;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,8 +30,8 @@ public class MainFragment extends BrowseSupportFragment {
         setUIElements();
 
         executorService = Executors.newSingleThreadExecutor();
-        channelDao = ChannelDao.getInstance(getContext());
-        displayChannels();
+        showDao = ShowDao.getInstance(getContext());
+        displayShows();
     }
 
     private void setUIElements() {
@@ -40,21 +42,21 @@ public class MainFragment extends BrowseSupportFragment {
         setSearchAffordanceColor(ContextCompat.getColor(getContext(), R.color.search_opaque));
     }
 
-    private void displayChannels() {
+    private void displayShows() {
         executorService.submit(() -> {
-            List<Channel> channels = channelDao.getAllChannels();
+            List<Show> shows = showDao.getAllShows();
 
             ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-            ChannelPresenter channelPresenter = new ChannelPresenter();
-            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(channelPresenter);
+            ShowPresenter showPresenter = new ShowPresenter();
+            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(showPresenter);
 
-            for (Channel channel : channels) {
-                listRowAdapter.add(channel);
+            for (Show show : shows) {
+                listRowAdapter.add(show);
             }
 
-            HeaderItem header = new HeaderItem(0, "Live TV");
+            HeaderItem header = new HeaderItem(0, "Shows");
             rowsAdapter.add(new ListRow(header, listRowAdapter));
-            getActivity().runOnUiThread(() -> setAdapter(rowsAdapter));
+            new Handler(Looper.getMainLooper()).post(() -> setAdapter(rowsAdapter));
         });
     }
 }

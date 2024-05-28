@@ -1,7 +1,9 @@
 package com.iptv.iptv2.activities;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                 User user = userDao.getUser(username, password);
 
                 if (user != null) {
+                    Log.d("LoginActivity", "LOGIN SUCCESSFULL");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
