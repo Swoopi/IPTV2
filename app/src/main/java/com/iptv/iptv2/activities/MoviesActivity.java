@@ -28,7 +28,7 @@ public class MoviesActivity extends AppCompatActivity {
 
         movieDao = MovieDao.getInstance(this);
         List<Movie> movies = movieDao.getAllMovies();
-        movieAdapter = new MovieAdapter(movies);
+        movieAdapter = new MovieAdapter(this, movies);
 
         backButton.setOnClickListener(v -> finish());
 
@@ -36,7 +36,7 @@ public class MoviesActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(movieAdapter);
     }
 }

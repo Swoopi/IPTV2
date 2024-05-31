@@ -8,8 +8,9 @@ public class Channel {
     private String tvgType;
     private String groupTitle;
     private String tvgLogo;
+    private String region;
 
-    public Channel(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo) {
+    public Channel(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region) {
         this.name = name;
         this.url = url;
         this.tvgId = tvgId;
@@ -17,11 +18,14 @@ public class Channel {
         this.tvgType = tvgType;
         this.groupTitle = groupTitle;
         this.tvgLogo = tvgLogo;
+        this.region = region;
     }
 
     public String getName() {
         return name;
     }
+
+    public String getRegion(){ return region; }
 
     public String getUrl() {
         return url;
@@ -49,6 +53,7 @@ public class Channel {
     public void setTvgLogo(String tvgLogo) {
         this.tvgLogo = tvgLogo;
     }
+
 
 
     @Override

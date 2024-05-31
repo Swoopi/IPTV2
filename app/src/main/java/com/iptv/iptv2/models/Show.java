@@ -8,8 +8,9 @@ public class Show {
     private String tvgType;
     private String groupTitle;
     private String tvgLogo;
+    private String region;
 
-    public Show(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo) {
+    public Show(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region) {
         this.name = name;
         this.url = url;
         this.tvgId = tvgId;
@@ -17,11 +18,14 @@ public class Show {
         this.tvgType = tvgType;
         this.groupTitle = groupTitle;
         this.tvgLogo = tvgLogo;
+        this.region = region;
     }
 
     // Getters and setters
     public String getName() { return name; }
     public String getUrl() { return url; }
+    public String getRegion(){ return region; }
+
     public String getTvgId() { return tvgId; }
     public String getTvgName() { return tvgName; }
     public String getTvgType() { return tvgType; }

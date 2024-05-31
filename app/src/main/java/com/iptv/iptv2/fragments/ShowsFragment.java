@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.dao.ShowDao;
 import com.iptv.iptv2.models.Show;
-import com.iptv.iptv2.presenters.ShowPresenter;
+import com.iptv.iptv2.presenters.ChannelPresenter;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -47,14 +47,14 @@ public class ShowsFragment extends BrowseSupportFragment {
             List<Show> shows = showDao.getAllShows();
 
             ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-            ShowPresenter showPresenter = new ShowPresenter();
-            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(showPresenter);
+            ChannelPresenter channelPresenter = new ChannelPresenter();
+            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(channelPresenter);
 
             for (Show show : shows) {
                 listRowAdapter.add(show);
             }
 
-            HeaderItem header = new HeaderItem(0, "Shows");
+            HeaderItem header = new HeaderItem(0, "TV Shows");
             rowsAdapter.add(new ListRow(header, listRowAdapter));
             new Handler(Looper.getMainLooper()).post(() -> setAdapter(rowsAdapter));
         });

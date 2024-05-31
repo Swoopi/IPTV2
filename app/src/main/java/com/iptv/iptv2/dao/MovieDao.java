@@ -24,6 +24,7 @@ public class MovieDao extends SQLiteOpenHelper {
     private static final String COLUMN_TVG_TYPE = "tvgType";
     private static final String COLUMN_GROUP_TITLE = "groupTitle";
     private static final String COLUMN_TVG_LOGO = "tvgLogo";
+    private static final String COLUMN_REGION = "region"; // New column
 
     private static MovieDao instance;
     private SQLiteDatabase db;
@@ -49,14 +50,16 @@ public class MovieDao extends SQLiteOpenHelper {
                 + COLUMN_TVG_NAME + " TEXT,"
                 + COLUMN_TVG_TYPE + " TEXT,"
                 + COLUMN_GROUP_TITLE + " TEXT,"
-                + COLUMN_TVG_LOGO + " TEXT" + ")";
+                + COLUMN_TVG_LOGO + " TEXT,"
+                + COLUMN_REGION + " TEXT" + ")"; // Add region column
         db.execSQL(CREATE_MOVIES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVIES);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_MOVIES + " ADD COLUMN " + COLUMN_REGION + " TEXT");
+        }
     }
 
     public void open() {
@@ -81,6 +84,7 @@ public class MovieDao extends SQLiteOpenHelper {
         values.put(COLUMN_TVG_TYPE, movie.getTvgType());
         values.put(COLUMN_GROUP_TITLE, movie.getGroupTitle());
         values.put(COLUMN_TVG_LOGO, movie.getTvgLogo());
+        values.put(COLUMN_REGION, movie.getRegion()); // Insert region
         db.insert(TABLE_MOVIES, null, values);
         close();
     }
@@ -94,7 +98,12 @@ public class MovieDao extends SQLiteOpenHelper {
     public List<Movie> getAllMovies() {
         open();
         List<Movie> movies = new ArrayList<>();
-        Cursor cursor = db.query(TABLE_MOVIES, null, null, null, null, null, null);
+        String[] columns = {
+                COLUMN_ID, COLUMN_NAME, COLUMN_URL, COLUMN_TVG_ID,
+                COLUMN_TVG_NAME, COLUMN_TVG_TYPE, COLUMN_GROUP_TITLE,
+                COLUMN_TVG_LOGO, COLUMN_REGION
+        };
+        Cursor cursor = db.query(TABLE_MOVIES, columns, null, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -105,7 +114,8 @@ public class MovieDao extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_NAME)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_TYPE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_GROUP_TITLE)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_LOGO))
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_LOGO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)) // Get region
                 );
                 movies.add(movie);
             } while (cursor.moveToNext());

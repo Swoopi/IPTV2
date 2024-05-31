@@ -28,7 +28,7 @@ public class ShowsActivity extends AppCompatActivity {
 
         showDao = ShowDao.getInstance(this);
         List<Show> shows = showDao.getAllShows();
-        showAdapter = new ShowAdapter(shows);
+        showAdapter = new ShowAdapter(this, shows);
 
         backButton.setOnClickListener(v -> finish());
 
@@ -36,7 +36,7 @@ public class ShowsActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(showAdapter);
     }
 }

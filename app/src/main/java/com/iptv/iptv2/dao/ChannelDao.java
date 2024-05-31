@@ -24,6 +24,7 @@ public class ChannelDao extends SQLiteOpenHelper {
     private static final String COLUMN_TVG_TYPE = "tvgType";
     private static final String COLUMN_GROUP_TITLE = "groupTitle";
     private static final String COLUMN_TVG_LOGO = "tvgLogo";
+    private static final String COLUMN_REGION = "region"; // New column
 
     private static ChannelDao instance;
 
@@ -48,14 +49,16 @@ public class ChannelDao extends SQLiteOpenHelper {
                 + COLUMN_TVG_NAME + " TEXT,"
                 + COLUMN_TVG_TYPE + " TEXT,"
                 + COLUMN_GROUP_TITLE + " TEXT,"
-                + COLUMN_TVG_LOGO + " TEXT" + ")";
+                + COLUMN_TVG_LOGO + " TEXT,"
+                + COLUMN_REGION + " TEXT" + ")"; // Add region column
         db.execSQL(CREATE_CHANNELS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHANNELS);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_CHANNELS + " ADD COLUMN " + COLUMN_REGION + " TEXT");
+        }
     }
 
     public void insertChannel(Channel channel) {
@@ -68,6 +71,7 @@ public class ChannelDao extends SQLiteOpenHelper {
         values.put(COLUMN_TVG_TYPE, channel.getTvgType());
         values.put(COLUMN_GROUP_TITLE, channel.getGroupTitle());
         values.put(COLUMN_TVG_LOGO, channel.getTvgLogo());
+        values.put(COLUMN_REGION, channel.getRegion()); // Insert region
 
         db.insert(TABLE_CHANNELS, null, values);
         db.close();
@@ -82,18 +86,24 @@ public class ChannelDao extends SQLiteOpenHelper {
     public List<Channel> getAllChannels() {
         List<Channel> channels = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CHANNELS, null);
+        String[] columns = {
+                COLUMN_ID, COLUMN_NAME, COLUMN_URL, COLUMN_TVG_ID,
+                COLUMN_TVG_NAME, COLUMN_TVG_TYPE, COLUMN_GROUP_TITLE,
+                COLUMN_TVG_LOGO, COLUMN_REGION
+        };
+        Cursor cursor = db.query(TABLE_CHANNELS, columns, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
                 Channel channel = new Channel(
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6),
-                        cursor.getString(7)
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_TYPE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_GROUP_TITLE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_LOGO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)) // Get region
                 );
                 channels.add(channel);
             } while (cursor.moveToNext());

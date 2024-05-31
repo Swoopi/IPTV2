@@ -1,25 +1,27 @@
 package com.iptv.iptv2.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.iptv.iptv2.R;
+import com.iptv.iptv2.activities.PlaybackActivity;
 import com.iptv.iptv2.models.Channel;
-
 import java.util.List;
 
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder> {
 
+    private Context context;
     private List<Channel> channels;
 
-    public ChannelAdapter(List<Channel> channels) {
+    public ChannelAdapter(Context context, List<Channel> channels) {
+        this.context = context;
         this.channels = channels;
     }
 
@@ -33,12 +35,23 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
     @Override
     public void onBindViewHolder(@NonNull ChannelViewHolder holder, int position) {
         Channel channel = channels.get(position);
-        holder.channelName.setText(channel.getName());
-        Glide.with(holder.itemView.getContext())
-                .load(channel.getTvgLogo())
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.error)
-                .into(holder.channelLogo);
+        holder.titleTextView.setText(channel.getName());
+
+        if (channel.getTvgLogo() != null && !channel.getTvgLogo().isEmpty()) {
+            Glide.with(context)
+                    .load(channel.getTvgLogo())
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.error)
+                    .into(holder.logoImageView);
+        } else {
+            holder.logoImageView.setImageResource(R.drawable.error);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PlaybackActivity.class);
+            intent.putExtra(PlaybackActivity.CHANNEL_URL, channel.getUrl());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -46,15 +59,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         return channels.size();
     }
 
-    static class ChannelViewHolder extends RecyclerView.ViewHolder {
+    public static class ChannelViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTextView;
+        ImageView logoImageView;
 
-        ImageView channelLogo;
-        TextView channelName;
-
-        ChannelViewHolder(View itemView) {
+        public ChannelViewHolder(@NonNull View itemView) {
             super(itemView);
-            channelLogo = itemView.findViewById(R.id.channel_logo);
-            channelName = itemView.findViewById(R.id.channel_name);
+            titleTextView = itemView.findViewById(R.id.channel_name);
+            logoImageView = itemView.findViewById(R.id.channel_logo);
         }
     }
 }

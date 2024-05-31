@@ -32,7 +32,8 @@ android {
 }
 
 dependencies {
-    implementation("androidx.leanback:leanback:1.0.0")
+    val leanback_version = "1.2.0-alpha04"
+    implementation("androidx.leanback:leanback:$leanback_version")
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("com.github.bumptech.glide:glide:4.12.0")
@@ -43,5 +44,9 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
+
+
+
+
 
 }

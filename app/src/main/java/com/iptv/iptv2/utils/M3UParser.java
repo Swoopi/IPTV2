@@ -21,6 +21,7 @@ public class M3UParser {
         String tvgType = null;
         String groupTitle = null;
         String tvgLogo = null;
+        String region = null;
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#EXTINF")) {
@@ -43,13 +44,27 @@ public class M3UParser {
                     name = line.substring(commaIndex + 1).trim();
                 }
             } else if (line.startsWith("http") && name != null) {
-                channels.add(new Channel(name, line.trim(), tvgId, tvgName, tvgType, groupTitle, tvgLogo));
+                String url = line.trim();
+                // Extract the region from the URL
+                int regionIndex = url.lastIndexOf('/');
+                region = regionIndex != -1 ? url.substring(regionIndex + 1, url.length()).replaceAll(".m3u8$", "") : "Unknown";
+
+                // Ensure tvgLogo ends properly
+                if (tvgLogo != null && !tvgLogo.endsWith(".png")) {
+                    int commaIndex = tvgLogo.indexOf(",");
+                    if (commaIndex != -1) {
+                        tvgLogo = tvgLogo.substring(0, commaIndex).trim();
+                    }
+                }
+
+                channels.add(new Channel(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region));
                 name = null;
                 tvgId = null;
                 tvgName = null;
                 tvgType = null;
                 groupTitle = null;
                 tvgLogo = null;
+                region = null;
             }
         }
         return channels;
@@ -65,6 +80,7 @@ public class M3UParser {
         String tvgType = null;
         String groupTitle = null;
         String tvgLogo = null;
+        String region = null;
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#EXTINF")) {
@@ -87,13 +103,27 @@ public class M3UParser {
                     name = line.substring(commaIndex + 1).trim();
                 }
             } else if (line.startsWith("http") && name != null) {
-                movies.add(new Movie(name, line.trim(), tvgId, tvgName, tvgType, groupTitle, tvgLogo));
+                String url = line.trim();
+                // Extract the region from the URL
+                int regionIndex = url.lastIndexOf('/');
+                region = regionIndex != -1 ? url.substring(regionIndex + 1, url.length()).replaceAll(".m3u8$", "") : "Unknown";
+
+                // Ensure tvgLogo ends properly
+                if (tvgLogo != null && !tvgLogo.endsWith(".png")) {
+                    int commaIndex = tvgLogo.indexOf(",");
+                    if (commaIndex != -1) {
+                        tvgLogo = tvgLogo.substring(0, commaIndex).trim();
+                    }
+                }
+
+                movies.add(new Movie(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region));
                 name = null;
                 tvgId = null;
                 tvgName = null;
                 tvgType = null;
                 groupTitle = null;
                 tvgLogo = null;
+                region = null;
             }
         }
         return movies;
@@ -109,6 +139,7 @@ public class M3UParser {
         String tvgType = null;
         String groupTitle = null;
         String tvgLogo = null;
+        String region = null;
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#EXTINF")) {
@@ -131,13 +162,27 @@ public class M3UParser {
                     name = line.substring(commaIndex + 1).trim();
                 }
             } else if (line.startsWith("http") && name != null) {
-                shows.add(new Show(name, line.trim(), tvgId, tvgName, tvgType, groupTitle, tvgLogo));
+                String url = line.trim();
+                // Extract the region from the URL
+                int regionIndex = url.lastIndexOf('/');
+                region = regionIndex != -1 ? url.substring(regionIndex + 1, url.length()).replaceAll(".m3u8$", "") : "Unknown";
+
+                // Ensure tvgLogo ends properly
+                if (tvgLogo != null && !tvgLogo.endsWith(".png")) {
+                    int commaIndex = tvgLogo.indexOf(",");
+                    if (commaIndex != -1) {
+                        tvgLogo = tvgLogo.substring(0, commaIndex).trim();
+                    }
+                }
+
+                shows.add(new Show(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region));
                 name = null;
                 tvgId = null;
                 tvgName = null;
                 tvgType = null;
                 groupTitle = null;
                 tvgLogo = null;
+                region = null;
             }
         }
         return shows;

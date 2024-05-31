@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Fetching Channels");
                 String liveTvContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv");
 
+
                 Log.d(TAG, "Parsing Channels");
                 List<Channel> liveTvChannels = M3UParser.parseM3UForChannels(liveTvContent);
                 Log.d(TAG, "Inserting Channels into database");
@@ -91,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
                     channelDao.insertChannel(channel);
                 }
                 Log.d(TAG, "Updated channels");
-
+                for (int i = 0; i < Math.min(5, liveTvChannels.size()); i++) {
+                    Log.d(TAG, "Channel " + (i + 1) + ": " + liveTvChannels.get(i));
+                }
 
                 // Update Movies
                 Log.d(TAG, "Fetching Movies");

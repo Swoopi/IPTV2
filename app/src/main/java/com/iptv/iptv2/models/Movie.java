@@ -8,8 +8,9 @@ public class Movie {
     private String tvgType;
     private String groupTitle;
     private String tvgLogo;
+    private String region;
 
-    public Movie(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo) {
+    public Movie(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region) {
         this.name = name;
         this.url = url;
         this.tvgId = tvgId;
@@ -17,9 +18,17 @@ public class Movie {
         this.tvgType = tvgType;
         this.groupTitle = groupTitle;
         this.tvgLogo = tvgLogo;
+        this.region = region;
     }
 
     // Getters and setters
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
     public String getName() { return name; }
     public String getUrl() { return url; }
     public String getTvgId() { return tvgId; }
