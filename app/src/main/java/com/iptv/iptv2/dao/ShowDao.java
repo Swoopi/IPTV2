@@ -6,15 +6,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+
 import com.iptv.iptv2.models.Show;
 
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShowDao extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "shows.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "iptv.db";
+    private static final int DATABASE_VERSION = 3;
     private static final String TABLE_SHOWS = "shows";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
@@ -25,9 +30,13 @@ public class ShowDao extends SQLiteOpenHelper {
     private static final String COLUMN_GROUP_TITLE = "groupTitle";
     private static final String COLUMN_TVG_LOGO = "tvgLogo";
     private static final String COLUMN_REGION = "region"; // New column
+    private static final String COLUMN_CATEGORIES = "categories";
 
     private static ShowDao instance;
+
     private SQLiteDatabase db;
+    private Gson gson = new Gson();
+
 
     private ShowDao(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,7 +50,9 @@ public class ShowDao extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db) {createShowsTable(db);}
+
+    public void createShowsTable(SQLiteDatabase db){
         String CREATE_SHOWS_TABLE = "CREATE TABLE " + TABLE_SHOWS + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_NAME + " TEXT,"
@@ -51,7 +62,8 @@ public class ShowDao extends SQLiteOpenHelper {
                 + COLUMN_TVG_TYPE + " TEXT,"
                 + COLUMN_GROUP_TITLE + " TEXT,"
                 + COLUMN_TVG_LOGO + " TEXT,"
-                + COLUMN_REGION + " TEXT" + ")"; // Add region column
+                + COLUMN_REGION + " TEXT,"
+                + COLUMN_CATEGORIES + ")"; // Add region column
         db.execSQL(CREATE_SHOWS_TABLE);
     }
 
@@ -74,6 +86,8 @@ public class ShowDao extends SQLiteOpenHelper {
         }
     }
 
+
+
     public void insertShow(Show show) {
         open();
         ContentValues values = new ContentValues();
@@ -91,7 +105,8 @@ public class ShowDao extends SQLiteOpenHelper {
 
     public void clearShows() {
         open();
-        db.delete(TABLE_SHOWS, null, null);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHOWS);
+        createShowsTable(db);  // Recreate the table after dropping it
         close();
     }
 
@@ -101,12 +116,14 @@ public class ShowDao extends SQLiteOpenHelper {
         String[] columns = {
                 COLUMN_ID, COLUMN_NAME, COLUMN_URL, COLUMN_TVG_ID,
                 COLUMN_TVG_NAME, COLUMN_TVG_TYPE, COLUMN_GROUP_TITLE,
-                COLUMN_TVG_LOGO, COLUMN_REGION
+                COLUMN_TVG_LOGO, COLUMN_REGION, COLUMN_CATEGORIES
         };
         Cursor cursor = db.query(TABLE_SHOWS, columns, null, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
+                Type listType = new TypeToken<List<String>>() {}.getType();
+                List<String> categories = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORIES)), listType);
                 Show show = new Show(
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL)),
@@ -115,7 +132,8 @@ public class ShowDao extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_TYPE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_GROUP_TITLE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_LOGO)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)) // Get region
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)), // Get region
+                        categories
                 );
                 shows.add(show);
             } while (cursor.moveToNext());
@@ -125,30 +143,5 @@ public class ShowDao extends SQLiteOpenHelper {
         return shows;
     }
 
-    public Show getShow(String name) {
-        open();
-        Cursor cursor = db.query(TABLE_SHOWS, new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_URL, COLUMN_TVG_ID, COLUMN_TVG_NAME, COLUMN_TVG_TYPE, COLUMN_GROUP_TITLE, COLUMN_TVG_LOGO, COLUMN_REGION},
-                COLUMN_NAME + "=?",
-                new String[]{name}, null, null, null);
 
-        if (cursor != null && cursor.moveToFirst()) {
-            Show show = new Show(
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_URL)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_NAME)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_TYPE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_GROUP_TITLE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TVG_LOGO)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REGION)) // Get region
-            );
-            cursor.close();
-            return show;
-        } else {
-            if (cursor != null) {
-                cursor.close();
-            }
-            return null;
-        }
-    }
 }

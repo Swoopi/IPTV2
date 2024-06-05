@@ -3,20 +3,25 @@ package com.iptv.iptv2.activities;
 import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.iptv.iptv2.R;
+import com.iptv.iptv2.adapters.CategoryAdapter;
 import com.iptv.iptv2.adapters.ChannelAdapter;
 import com.iptv.iptv2.dao.ChannelDao;
 import com.iptv.iptv2.models.Channel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LiveTVActivity extends AppCompatActivity {
 
     private Button backButton;
-    private RecyclerView recyclerView;
+    private RecyclerView liveTvRecyclerView;
+    private RecyclerView categoriesRecyclerView;
     private ChannelDao channelDao;
     private ChannelAdapter channelAdapter;
+    private CategoryAdapter categoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +29,40 @@ public class LiveTVActivity extends AppCompatActivity {
         setContentView(R.layout.activity_live_tv);
 
         backButton = findViewById(R.id.backButton);
-        recyclerView = findViewById(R.id.live_tv_recycler_view);
+        liveTvRecyclerView = findViewById(R.id.live_tv_recycler_view);
+        categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
 
         channelDao = ChannelDao.getInstance(this);
         List<Channel> channels = channelDao.getAllChannels();
         channelAdapter = new ChannelAdapter(this, channels);
+
+        List<String> categories = getCategoriesFromChannels(channels);
+        categoryAdapter = new CategoryAdapter(this, categories, channelAdapter);
 
         backButton.setOnClickListener(v -> finish());
 
         setupRecyclerView();
     }
 
+    private List<String> getCategoriesFromChannels(List<Channel> channels) {
+        List<String> categories = new ArrayList<>();
+        for (Channel channel : channels) {
+            if (channel.getCategories() != null) {
+                for (String category : channel.getCategories()) {
+                    if (!categories.contains(category)) {
+                        categories.add(category);
+                    }
+                }
+            }
+        }
+        return categories;
+    }
+
     private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(channelAdapter);
+        liveTvRecyclerView.setLayoutManager(new GridLayoutManager(this, 6)); // 2 columns
+        liveTvRecyclerView.setAdapter(channelAdapter);
+
+        categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        categoriesRecyclerView.setAdapter(categoryAdapter);
     }
 }

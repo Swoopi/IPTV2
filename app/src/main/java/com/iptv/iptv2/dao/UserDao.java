@@ -11,7 +11,7 @@ import com.iptv.iptv2.models.User;
 public class UserDao extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 2; // Updated version to avoid downgrade issues
+    private static final int DATABASE_VERSION = 3; // Updated version to avoid downgrade issues
     private static final String TABLE_USERS = "users";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_USERNAME = "username";

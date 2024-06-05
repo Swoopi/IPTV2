@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
         channelDao = ChannelDao.getInstance(this);
         movieDao = MovieDao.getInstance(this);
         showDao = ShowDao.getInstance(this);
+
+        // List all tables in the database
+        channelDao.listTables();
+        //movieDao.listTables();
+        //showDao.listTables();
     }
 
     private void navigateToCategory(String category) {
@@ -85,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
                 String liveTvContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv");
 
 
+                // Print the first few lines of the M3U content
+                Log.d(TAG, "First few lines of M3U content:");
+                String[] lines = liveTvContent.split("\n");
+                for (int i = 0; i < Math.min(20, lines.length); i++) {
+                    Log.d(TAG, lines[i]);
+                }
+
                 Log.d(TAG, "Parsing Channels");
                 List<Channel> liveTvChannels = M3UParser.parseM3UForChannels(liveTvContent);
                 Log.d(TAG, "Inserting Channels into database");
@@ -100,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Fetching Movies");
                 String moviesContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/movies");
 
+                // Print the first few lines of the M3U content
+                Log.d(TAG, "First few lines of Movies M3U content:");
+                lines = moviesContent.split("\n");
+                for (int i = 0; i < Math.min(20, lines.length); i++) {
+                    Log.d(TAG, lines[i]);
+                }
+
                 Log.d(TAG, "Parsing Movies");
                 List<Movie> movieChannels = M3UParser.parseM3UForMovies(moviesContent);
                 Log.d(TAG, "Inserting Movies into database");
@@ -112,6 +131,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Fetching Shows");
                 String showsContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/tvshows");
 
+                // Print the first few lines of the M3U content
+                Log.d(TAG, "First few lines of Shows M3U content:");
+                lines = showsContent.split("\n");
+                for (int i = 0; i < Math.min(20, lines.length); i++) {
+                    Log.d(TAG, lines[i]);
+                }
+
                 Log.d(TAG, "Parsing Shows");
                 List<Show> showChannels = M3UParser.parseM3UForShows(showsContent);
                 Log.d(TAG, "Inserting Shows into database");
@@ -119,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                     showDao.insertShow(show);
                 }
                 Log.d(TAG, "Updated shows");
-
 
                 Log.d(TAG, "Update complete");
 

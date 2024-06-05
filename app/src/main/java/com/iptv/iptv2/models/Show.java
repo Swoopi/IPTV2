@@ -1,5 +1,7 @@
 package com.iptv.iptv2.models;
 
+import java.util.List;
+
 public class Show {
     private String name;
     private String url;
@@ -9,8 +11,9 @@ public class Show {
     private String groupTitle;
     private String tvgLogo;
     private String region;
+    private List<String> categories;
 
-    public Show(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region) {
+    public Show(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region, List<String> categories) {
         this.name = name;
         this.url = url;
         this.tvgId = tvgId;
@@ -19,6 +22,7 @@ public class Show {
         this.groupTitle = groupTitle;
         this.tvgLogo = tvgLogo;
         this.region = region;
+        this.categories = categories;
     }
 
     // Getters and setters
@@ -33,6 +37,11 @@ public class Show {
     public String getTvgLogo() { return tvgLogo; }
     public void setTvgLogo(String tvgLogo) { this.tvgLogo = tvgLogo; }
 
+    public List<String> getCategories() {
+        return categories;
+    }
+    public void setCategories(){ this.categories = categories;}
+
     @Override
     public String toString() {
         return "Show{" +
@@ -43,6 +52,8 @@ public class Show {
                 ", tvgType='" + tvgType + '\'' +
                 ", groupTitle='" + groupTitle + '\'' +
                 ", tvgLogo='" + tvgLogo + '\'' +
+                ", categories='" + categories + '\'' +
+
                 '}';
     }
 }

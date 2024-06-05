@@ -7,6 +7,7 @@ import com.iptv.iptv2.models.Show;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class M3UParser {
@@ -22,6 +23,7 @@ public class M3UParser {
         String groupTitle = null;
         String tvgLogo = null;
         String region = null;
+        List<String> categories = null;
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#EXTINF")) {
@@ -35,6 +37,7 @@ public class M3UParser {
                         tvgType = attribute.substring(10, attribute.length() - 1);
                     } else if (attribute.startsWith("group-title=")) {
                         groupTitle = attribute.substring(13, attribute.length() - 1);
+                        categories = Arrays.asList(groupTitle.split(","));
                     } else if (attribute.startsWith("tvg-logo=")) {
                         tvgLogo = attribute.substring(10, attribute.length() - 1).replace("\"", ""); // Clean up URL
                     }
@@ -57,7 +60,7 @@ public class M3UParser {
                     }
                 }
 
-                channels.add(new Channel(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region));
+                channels.add(new Channel(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region, categories));
                 name = null;
                 tvgId = null;
                 tvgName = null;
@@ -65,6 +68,7 @@ public class M3UParser {
                 groupTitle = null;
                 tvgLogo = null;
                 region = null;
+                categories = null;
             }
         }
         return channels;
@@ -81,6 +85,7 @@ public class M3UParser {
         String groupTitle = null;
         String tvgLogo = null;
         String region = null;
+        List<String> categories = null;
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#EXTINF")) {
@@ -94,6 +99,8 @@ public class M3UParser {
                         tvgType = attribute.substring(10, attribute.length() - 1);
                     } else if (attribute.startsWith("group-title=")) {
                         groupTitle = attribute.substring(13, attribute.length() - 1);
+                        categories = Arrays.asList(groupTitle.split(","));
+
                     } else if (attribute.startsWith("tvg-logo=")) {
                         tvgLogo = attribute.substring(10, attribute.length() - 1).replace("\"", ""); // Clean up URL
                     }
@@ -116,7 +123,7 @@ public class M3UParser {
                     }
                 }
 
-                movies.add(new Movie(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region));
+                movies.add(new Movie(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region, categories));
                 name = null;
                 tvgId = null;
                 tvgName = null;
@@ -124,6 +131,7 @@ public class M3UParser {
                 groupTitle = null;
                 tvgLogo = null;
                 region = null;
+                categories = null;
             }
         }
         return movies;
@@ -140,6 +148,7 @@ public class M3UParser {
         String groupTitle = null;
         String tvgLogo = null;
         String region = null;
+        List<String> categories = null;
 
         while ((line = reader.readLine()) != null) {
             if (line.startsWith("#EXTINF")) {
@@ -153,6 +162,7 @@ public class M3UParser {
                         tvgType = attribute.substring(10, attribute.length() - 1);
                     } else if (attribute.startsWith("group-title=")) {
                         groupTitle = attribute.substring(13, attribute.length() - 1);
+                        categories = Arrays.asList(groupTitle.split(","));
                     } else if (attribute.startsWith("tvg-logo=")) {
                         tvgLogo = attribute.substring(10, attribute.length() - 1).replace("\"", ""); // Clean up URL
                     }
@@ -175,7 +185,7 @@ public class M3UParser {
                     }
                 }
 
-                shows.add(new Show(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region));
+                shows.add(new Show(name, url, tvgId, tvgName, tvgType, groupTitle, tvgLogo, region, categories));
                 name = null;
                 tvgId = null;
                 tvgName = null;
@@ -183,6 +193,7 @@ public class M3UParser {
                 groupTitle = null;
                 tvgLogo = null;
                 region = null;
+                categories = null;
             }
         }
         return shows;

@@ -7,6 +7,13 @@
     android:padding="16dp"
     tools:context=".activities.ShowsActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/channel_categories"
+        android:layout_width="175dp"
+        android:layout_height="437dp"
+        android:layout_below="@+id/show_title"
+        android:layout_marginTop="26dp" />
+
     <TextView
         android:id="@+id/show_title"
         android:layout_width="wrap_content"
@@ -25,10 +32,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shows_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="729dp"
+        android:layout_height="437dp"
         android:layout_below="@id/show_title"
-        android:layout_marginTop="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
         android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+    </androidx.recyclerview.widget.RecyclerView>
 </RelativeLayout>

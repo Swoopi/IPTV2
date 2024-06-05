@@ -27,7 +27,7 @@
         android:id="@+id/movies_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/live_tv_title"
+        android:layout_below="@id/Movies_title"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

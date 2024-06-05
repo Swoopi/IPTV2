@@ -1,5 +1,8 @@
 package com.iptv.iptv2.models;
 
+import java.util.List;
+import java.util.Locale;
+
 public class Channel {
     private String name;
     private String url;
@@ -9,8 +12,9 @@ public class Channel {
     private String groupTitle;
     private String tvgLogo;
     private String region;
+    private List<String> categories;
 
-    public Channel(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region) {
+    public Channel(String name, String url, String tvgId, String tvgName, String tvgType, String groupTitle, String tvgLogo, String region, List<String> categories) {
         this.name = name;
         this.url = url;
         this.tvgId = tvgId;
@@ -19,6 +23,8 @@ public class Channel {
         this.groupTitle = groupTitle;
         this.tvgLogo = tvgLogo;
         this.region = region;
+        this.categories = categories;
+
     }
 
     public String getName() {
@@ -53,6 +59,11 @@ public class Channel {
     public void setTvgLogo(String tvgLogo) {
         this.tvgLogo = tvgLogo;
     }
+    public List<String> getCategories() {
+        return categories;
+    }
+    public void setCategories(){ this.categories = categories;}
+
 
 
 
@@ -66,6 +77,8 @@ public class Channel {
                 ", tvgType='" + tvgType + '\'' +
                 ", groupTitle='" + groupTitle + '\'' +
                 ", tvgLogo='" + tvgLogo + '\'' +
+                ", region='" + region + '\'' +
+                ", categories=" + categories +
                 '}';
     }
 }

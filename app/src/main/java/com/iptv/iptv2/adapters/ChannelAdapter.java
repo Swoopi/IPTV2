@@ -28,7 +28,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.channel_item, parent, false);
         return new ChannelViewHolder(view);
     }
 
@@ -44,12 +44,13 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
                     .error(R.drawable.error)
                     .into(holder.logoImageView);
         } else {
-            holder.logoImageView.setImageResource(R.drawable.error);
+            holder.logoImageView.setImageResource(R.drawable.error); // Set a default image when the URL is null
         }
 
         holder.itemView.setOnClickListener(v -> {
+            // Handle the click event, e.g., start PlaybackActivity with the channel URL
             Intent intent = new Intent(context, PlaybackActivity.class);
-            intent.putExtra(PlaybackActivity.CHANNEL_URL, channel.getUrl());
+            intent.putExtra("CHANNEL_URL", channel.getUrl());
             context.startActivity(intent);
         });
     }
@@ -57,6 +58,15 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
     @Override
     public int getItemCount() {
         return channels.size();
+    }
+
+    public void updateChannels(List<Channel> newChannels) {
+        channels = newChannels;
+        notifyDataSetChanged();
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
     }
 
     public static class ChannelViewHolder extends RecyclerView.ViewHolder {
