@@ -14,6 +14,7 @@ import com.iptv.iptv2.models.Movie;
 import com.iptv.iptv2.models.Show;
 import com.iptv.iptv2.utils.M3UFetcher;
 import com.iptv.iptv2.utils.M3UParser;
+import com.iptv.iptv2.utils.UpdateChecker;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         channelDao = ChannelDao.getInstance(this);
         movieDao = MovieDao.getInstance(this);
         showDao = ShowDao.getInstance(this);
+
+        UpdateChecker updateChecker = new UpdateChecker(this);
 
         // List all tables in the database
         channelDao.listTables();

@@ -1,7 +1,10 @@
 package com.iptv.iptv2.activities;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
+import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,11 +20,13 @@ import java.util.List;
 public class LiveTVActivity extends AppCompatActivity {
 
     private Button backButton;
+    private EditText searchEditText;
     private RecyclerView liveTvRecyclerView;
     private RecyclerView categoriesRecyclerView;
     private ChannelDao channelDao;
     private ChannelAdapter channelAdapter;
     private CategoryAdapter categoryAdapter;
+    private List<Channel> channels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +34,12 @@ public class LiveTVActivity extends AppCompatActivity {
         setContentView(R.layout.activity_live_tv);
 
         backButton = findViewById(R.id.backButton);
+        searchEditText = findViewById(R.id.searchEditText);
         liveTvRecyclerView = findViewById(R.id.live_tv_recycler_view);
         categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
 
         channelDao = ChannelDao.getInstance(this);
-        List<Channel> channels = channelDao.getAllChannels();
+        channels = channelDao.getAllChannels();
         channelAdapter = new ChannelAdapter(this, channels);
 
         List<String> categories = getCategoriesFromChannels(channels);
@@ -42,6 +48,7 @@ public class LiveTVActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> finish());
 
         setupRecyclerView();
+        setupSearch();
     }
 
     private List<String> getCategoriesFromChannels(List<Channel> channels) {
@@ -59,10 +66,40 @@ public class LiveTVActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        liveTvRecyclerView.setLayoutManager(new GridLayoutManager(this, 6)); // 2 columns
+        liveTvRecyclerView.setLayoutManager(new GridLayoutManager(this, 6)); // 6 columns
         liveTvRecyclerView.setAdapter(channelAdapter);
 
         categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         categoriesRecyclerView.setAdapter(categoryAdapter);
+    }
+
+    private void setupSearch() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // No action needed before text is changed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // Filter channels as the user types
+                filterChannels(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // No action needed after text is changed
+            }
+        });
+    }
+
+    private void filterChannels(String query) {
+        List<Channel> filteredChannels = new ArrayList<>();
+        for (Channel channel : channels) {
+            if (channel.getName().toLowerCase().contains(query.toLowerCase())) {
+                filteredChannels.add(channel);
+            }
+        }
+        channelAdapter.updateChannels(filteredChannels);
     }
 }
