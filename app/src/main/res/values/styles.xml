@@ -12,8 +12,14 @@
     <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <!-- Dark variant of the primary color -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!-- Accent color -->
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- Background color -->
+        <item name="android:windowBackground">@color/colorGray</item>
+        <!-- Other customizations -->
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
 </resources>

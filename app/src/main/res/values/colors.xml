@@ -3,9 +3,13 @@
     <color name="fastlane_background">#FF000000</color> <!-- Black -->
     <color name="search_opaque">#FFFFFFFF</color> <!-- White -->
 
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#6ccf3f</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGray">#24272c</color>
+    <color name="colorGrayDark">#191b1f</color>
 
 
 </resources>
