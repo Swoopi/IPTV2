@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">IPTV2</string>
     <string name="browse_title">Browse Channels</string>
+    <string name="back_button">Back</string>
+    <string name="profile_button">Profile</string>
+    <string name="settings_button">Settings</string>
+    <string name="movies_button">Movies</string>
+    <string name="shows_button">Shows</string>
+    <string name="update_button">Update</string>
+    <string name="multi_screen_button">Multiscreen</string>
 </resources>

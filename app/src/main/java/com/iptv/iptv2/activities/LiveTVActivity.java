@@ -3,7 +3,7 @@ package com.iptv.iptv2.activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class LiveTVActivity extends AppCompatActivity {
 
-    private Button backButton;
+    private ImageButton backButton;
     private EditText searchEditText;
     private RecyclerView liveTvRecyclerView;
     private RecyclerView categoriesRecyclerView;

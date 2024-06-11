@@ -3,7 +3,7 @@ package com.iptv.iptv2.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.dao.ChannelDao;
@@ -23,10 +23,10 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private Button btnMovies;
-    private Button btnShows;
-    private Button btnLiveTV;
-    private Button btnUpdate;
+    private ImageButton btnMovies;
+    private ImageButton btnShows;
+    private ImageButton btnLiveTV;
+    private ImageButton btnUpdate;
     private ExecutorService executorService;
     private ChannelDao channelDao;
     private MovieDao movieDao;
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                 // Update Live TV
                 Log.d(TAG, "Fetching Channels");
                 String liveTvContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv");
-
 
                 // Print the first few lines of the M3U content
                 Log.d(TAG, "First few lines of M3U content:");
