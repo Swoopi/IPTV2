@@ -7,59 +7,76 @@
     android:padding="16dp"
     tools:context=".activities.LoginActivity">
 
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="350dp"
-        android:layout_height="35sp"
-        android:layout_marginTop="4dp"
-        android:background="@color/colorGrayDark"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="@color/colorWhite"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/usernameEditText" />
-
     <Button
         android:id="@+id/signUpButton"
         android:layout_width="154dp"
         android:layout_height="46dp"
-        android:layout_marginTop="4dp"
         android:background="@color/colorPrimary"
         android:text="Sign Up"
         android:textColor="@color/fastlane_background"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginButton" />
+        tools:layout_editor_absoluteX="182dp"
+        tools:layout_editor_absoluteY="446dp" />
 
     <EditText
         android:id="@+id/usernameEditText"
         android:layout_width="350dp"
         android:layout_height="35dp"
-        android:layout_marginTop="228dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="76dp"
         android:background="@color/colorGrayDark"
         android:hint="Username"
         android:textColor="@color/colorPrimary"
         android:textColorHint="@color/colorWhite"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="350dp"
+        android:layout_height="35sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="76dp"
+        android:background="@color/colorGrayDark"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorWhite"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="156dp"
+        android:layout_marginEnd="104dp"
+        android:text="Enter your login details"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="154dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="150dp"
         android:background="@color/colorPrimary"
         android:text="Login"
         android:textColor="@color/colorBlack"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="295dp"
+        android:layout_height="295dp"
+        app:srcCompat="@drawable/Logo"
+        tools:layout_editor_absoluteX="103dp"
+        tools:layout_editor_absoluteY="123dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
