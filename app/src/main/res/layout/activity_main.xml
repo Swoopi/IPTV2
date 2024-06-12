@@ -39,6 +39,7 @@
             android:id="@+id/btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update"/>
+            android:background="#8D8FDE"
+            android:text="Update" />
     </LinearLayout>
 </RelativeLayout>
