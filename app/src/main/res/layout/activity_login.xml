@@ -11,12 +11,14 @@
         android:id="@+id/signUpButton"
         android:layout_width="154dp"
         android:layout_height="46dp"
+        android:layout_marginStart="198dp"
+        android:layout_marginBottom="32dp"
         android:background="@color/colorPrimary"
         android:text="Sign Up"
         android:textColor="@color/fastlane_background"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="182dp"
-        tools:layout_editor_absoluteY="446dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -75,8 +77,10 @@
         android:id="@+id/imageView"
         android:layout_width="295dp"
         android:layout_height="295dp"
-        app:srcCompat="@drawable/Logo"
-        tools:layout_editor_absoluteX="103dp"
-        tools:layout_editor_absoluteY="123dp" />
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
