@@ -28,7 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.movie_item, parent, false);
         return new MovieViewHolder(view);
     }
 
@@ -44,12 +44,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                     .error(R.drawable.error)
                     .into(holder.logoImageView);
         } else {
-            holder.logoImageView.setImageResource(R.drawable.error);
+            holder.logoImageView.setImageResource(R.drawable.error); // Set a default image when the URL is null
         }
 
         holder.itemView.setOnClickListener(v -> {
+            // Handle the click event, e.g., start PlaybackActivity with the movie URL
             Intent intent = new Intent(context, PlaybackActivity.class);
-            intent.putExtra(PlaybackActivity.CHANNEL_URL, movie.getUrl());
+            intent.putExtra("CHANNEL_URL", movie.getUrl());
             context.startActivity(intent);
         });
     }
@@ -57,6 +58,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    public void updateMovies(List<Movie> newMovies) {
+        movies = newMovies;
+        notifyDataSetChanged();
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
     }
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder {

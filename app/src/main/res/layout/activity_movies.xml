@@ -4,67 +4,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/colorGray"
     tools:context=".activities.MoviesActivity">
 
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:background="#24272c"
+        android:background="@color/colorGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/movies_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Movies"
-        android:textColor="#6ccf3f"
-        android:textSize="24sp"
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="53dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/back_button"
+        android:padding="5dp"
+        android:src="@drawable/back_icon"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/view"
-        android:layout_marginStart="16dp"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/MovieTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/movies_button"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view"
         app:layout_constraintVertical_bias="0.5" />
 
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="50dp"
         android:background="@drawable/search_background"
         android:drawableLeft="@drawable/ic_search"
         android:drawablePadding="10dp"
         android:hint="Search"
         android:inputType="text"
         android:padding="10dp"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorWhite"
         android:textColorHint="#AAAAAA"
         app:layout_constraintBottom_toBottomOf="@id/view"
-        app:layout_constraintEnd_toStartOf="@id/backButton"
+        app:layout_constraintEnd_toStartOf="@id/ChannelsButton"
+        app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintTop_toTopOf="@id/view"
-        app:layout_constraintStart_toEndOf="@id/movies_title"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/ChannelsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:background="@android:color/transparent"
+        android:padding="5dp"
+        android:text="LiveTV"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintEnd_toStartOf="@id/showsButton"
+        app:layout_constraintTop_toTopOf="@id/view"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/showsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:background="@android:color/transparent"
+        android:padding="5dp"
+        android:text="Shows"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/view"
-        android:layout_marginEnd="16dp"
         app:layout_constraintVertical_bias="0.5" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recycler_view"
         android:layout_width="189dp"
         android:layout_height="0dp"
-        android:background="#191B1F"
+        android:background="@color/colorGrayDark"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

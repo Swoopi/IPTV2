@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
-        android:id="@+id/live_tv_title"
+        android:id="@+id/LiveTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Live TV"
@@ -58,13 +58,13 @@
         android:textColor="@color/colorWhite"
         android:textColorHint="#AAAAAA"
         app:layout_constraintBottom_toBottomOf="@id/view"
-        app:layout_constraintEnd_toStartOf="@id/moviesButton"
+        app:layout_constraintEnd_toStartOf="@id/ChannelsButton"
         app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintTop_toTopOf="@id/view"
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
-        android:id="@+id/moviesButton"
+        android:id="@+id/ChannelsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
