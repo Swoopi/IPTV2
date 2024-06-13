@@ -1,8 +1,11 @@
 package com.iptv.iptv2.activities;
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,8 @@ public class LiveTVActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private EditText searchEditText;
+    private Button movieButton;
+    private Button showsButton;
     private RecyclerView liveTvRecyclerView;
     private RecyclerView categoriesRecyclerView;
     private ChannelDao channelDao;
@@ -37,6 +42,8 @@ public class LiveTVActivity extends AppCompatActivity {
         searchEditText = findViewById(R.id.searchEditText);
         liveTvRecyclerView = findViewById(R.id.live_tv_recycler_view);
         categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
+        movieButton = findViewById(R.id.movieButton);
+        showsButton = findViewById(R.id.showsButton);
 
         channelDao = ChannelDao.getInstance(this);
         channels = channelDao.getAllChannels();
@@ -47,6 +54,15 @@ public class LiveTVActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> finish());
 
+        movieButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LiveTVActivity.this, MoviesActivity.class);
+            startActivity(intent);
+        });
+
+        showsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(LiveTVActivity.this, ShowsActivity.class);
+            startActivity(intent);
+        });
         setupRecyclerView();
         setupSearch();
     }
