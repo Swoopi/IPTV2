@@ -58,7 +58,7 @@
         android:textColor="@color/colorWhite"
         android:textColorHint="#AAAAAA"
         app:layout_constraintBottom_toBottomOf="@id/view"
-        app:layout_constraintEnd_toStartOf="@id/movieButton"
+        app:layout_constraintEnd_toStartOf="@id/live_tv_Button"
         app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintTop_toTopOf="@id/view"
         app:layout_constraintVertical_bias="0.5" />
