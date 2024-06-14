@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.models.Movie;
-
 import java.util.ArrayList;
 import java.util.List;
 

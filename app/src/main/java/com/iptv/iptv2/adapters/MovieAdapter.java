@@ -44,13 +44,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                     .error(R.drawable.error)
                     .into(holder.logoImageView);
         } else {
-            holder.logoImageView.setImageResource(R.drawable.error); // Set a default image when the URL is null
+            holder.logoImageView.setImageResource(R.drawable.error);
         }
 
         holder.itemView.setOnClickListener(v -> {
-            // Handle the click event, e.g., start PlaybackActivity with the movie URL
             Intent intent = new Intent(context, PlaybackActivity.class);
-            intent.putExtra("CHANNEL_URL", movie.getUrl());
+            intent.putExtra(PlaybackActivity.CHANNEL_URL, movie.getUrl());
             context.startActivity(intent);
         });
     }
