@@ -52,6 +52,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             intent.putExtra(PlaybackActivity.CHANNEL_URL, movie.getUrl());
             context.startActivity(intent);
         });
+
+        holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                holder.itemView.setBackgroundResource(R.drawable.channel_item_hover);
+            } else {
+                holder.itemView.setBackgroundResource(R.drawable.channel_item);
+            }
+        });
     }
 
     @Override

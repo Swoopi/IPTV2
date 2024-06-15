@@ -63,6 +63,14 @@ public class MoviesActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        backButton.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                backButton.setImageResource(R.drawable.back_icon_hover);
+            } else {
+                backButton.setImageResource(R.drawable.back_icon);
+            }
+        });
+
         setupRecyclerView();
         setupSearch();
     }
