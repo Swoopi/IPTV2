@@ -54,6 +54,13 @@ public class LiveTVActivity extends AppCompatActivity {
 
         backButton.setOnClickListener(v -> finish());
 
+        backButton.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                backButton.setImageResource(R.drawable.back_icon_hover);
+            } else {
+                backButton.setImageResource(R.drawable.back_icon);
+            }
+        });
         movieButton.setOnClickListener(v -> {
             Intent intent = new Intent(LiveTVActivity.this, MoviesActivity.class);
             startActivity(intent);

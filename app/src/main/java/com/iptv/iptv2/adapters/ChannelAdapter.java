@@ -53,6 +53,15 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
             intent.putExtra("CHANNEL_URL", channel.getUrl());
             context.startActivity(intent);
         });
+
+        // Add focus change listener to change background on focus
+        holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                holder.itemView.setBackgroundResource(R.drawable.channel_item_hover);
+            } else {
+                holder.itemView.setBackgroundResource(R.drawable.channel_item);
+            }
+        });
     }
 
     @Override
