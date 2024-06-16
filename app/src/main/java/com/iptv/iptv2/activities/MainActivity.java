@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         showDao = ShowDao.getInstance(this);
 
         UpdateChecker updateChecker = new UpdateChecker(this);
+        updateChecker.checkForUpdate();
+
         btnLiveTV.requestFocus();
 
         // List all tables in the database

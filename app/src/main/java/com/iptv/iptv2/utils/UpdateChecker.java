@@ -19,7 +19,7 @@ import java.net.URL;
 
 public class UpdateChecker {
 
-    private static final String VERSION_URL = "https://yourwebsite.com/path/to/version.json"; // Replace with your URL
+    private static final String VERSION_URL = "https://dylancfarrell.com/version.json";
     private Context context;
 
     public UpdateChecker(Context context) {
