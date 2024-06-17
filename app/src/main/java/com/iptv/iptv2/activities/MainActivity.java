@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         btnMovies.setOnClickListener(view -> navigateToCategory("Movies"));
         btnShows.setOnClickListener(view -> navigateToCategory("Shows"));
         btnLiveTV.setOnClickListener(view -> navigateToCategory("Live TV"));
+        settingsButton.setOnClickListener(view -> settings());
         btnUpdate.setOnClickListener(view -> updateContent());
 
         setFocusChangeListeners();
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         //movieDao.listTables();
         //showDao.listTables();
     }
+
 
     private void setFocusChangeListeners() {
         btnMovies.setOnFocusChangeListener((v, hasFocus) -> {
@@ -137,6 +139,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void settings(){
+        Intent intent;
+        intent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
+    private void viewProfile(){
+        Intent intent;
+        intent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
 
     private void adjustButtonMargins(int buttonId, boolean expand) {
         ConstraintLayout layout = findViewById(R.id.constraintLayout);
