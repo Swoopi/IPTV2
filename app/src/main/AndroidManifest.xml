@@ -43,6 +43,12 @@
             android:theme="@style/AppCompatTheme">
 
         </activity>
+        <activity android:name=".activities.ProfileActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppCompatTheme">
+
+        </activity>
 
         <!-- Other activities with AppCompat theme -->
         <activity

@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         btnShows.setOnClickListener(view -> navigateToCategory("Shows"));
         btnLiveTV.setOnClickListener(view -> navigateToCategory("Live TV"));
         settingsButton.setOnClickListener(view -> settings());
+        profileButton.setOnClickListener(view -> viewProfile());
         btnUpdate.setOnClickListener(view -> updateContent());
 
         setFocusChangeListeners();
