@@ -65,6 +65,14 @@ public class LiveTVActivity extends AppCompatActivity {
             Intent intent = new Intent(LiveTVActivity.this, MoviesActivity.class);
             startActivity(intent);
         });
+        movieButton.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus){
+                movieButton.animate();
+            }
+            else {
+
+            }
+        });
 
         showsButton.setOnClickListener(v -> {
             Intent intent = new Intent(LiveTVActivity.this, ShowsActivity.class);
