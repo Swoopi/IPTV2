@@ -1,6 +1,7 @@
 package com.iptv.iptv2.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.dao.UserDao;
 import com.iptv.iptv2.models.User;
-
 public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         // Add hover effect
         addHoverEffect(loginButton);
         addHoverEffect(signUpButton);
+
     }
 
     private void addHoverEffect(View view) {
@@ -75,4 +76,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }

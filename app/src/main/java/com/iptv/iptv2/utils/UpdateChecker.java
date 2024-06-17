@@ -1,8 +1,8 @@
 package com.iptv.iptv2.utils;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import org.json.JSONObject;
@@ -26,11 +29,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.iptv.iptv2.activities.MainActivity;
+
 public class UpdateChecker {
 
     private static final String VERSION_URL = "https://dylancfarrell.com/version.json";
+    private static final int PERMISSION_REQUEST_CODE = 1001;
     private Context context;
     private long downloadId;
+    private String apkUrl;
+    private int latestVersionCode;
 
     public UpdateChecker(Context context) {
         this.context = context;
@@ -51,13 +59,16 @@ public class UpdateChecker {
                 }
 
                 JSONObject jsonObject = new JSONObject(result.toString());
-                int latestVersionCode = jsonObject.getInt("versionCode");
-                String apkUrl = jsonObject.getString("apkUrl");
+                latestVersionCode = jsonObject.getInt("versionCode");
+                apkUrl = jsonObject.getString("apkUrl");
 
                 int currentVersionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
 
+                Log.i("UpdateChecker", "Current version code: " + currentVersionCode);
+                Log.i("UpdateChecker", "Latest version code: " + latestVersionCode);
+
                 if (latestVersionCode > currentVersionCode) {
-                    showUpdateDialog(apkUrl);
+                    showUpdateDialog();
                 }
 
                 urlConnection.disconnect();
@@ -67,21 +78,31 @@ public class UpdateChecker {
         }).start();
     }
 
-    private void showUpdateDialog(String apkUrl) {
+    private void showUpdateDialog() {
         new Handler(Looper.getMainLooper()).post(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Update Available")
                     .setMessage("A new version of the app is available. Please update to the latest version.")
                     .setPositiveButton("Update", (dialog, which) -> {
-                        if (context.getPackageManager().canRequestPackageInstalls()) {
-                            startDownload(apkUrl);
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestStoragePermission();
                         } else {
-                            requestInstallPermission();
+                            if (context.getPackageManager().canRequestPackageInstalls()) {
+                                startDownload(apkUrl);
+                            } else {
+                                requestInstallPermission();
+                            }
                         }
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .setCancelable(false)
                     .show();
+        });
+    }
+
+    private void requestStoragePermission() {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            ActivityCompat.requestPermissions((MainActivity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         });
     }
 
@@ -116,6 +137,7 @@ public class UpdateChecker {
             public void onReceive(Context ctxt, Intent intent) {
                 long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                 if (id == downloadId) {
+                    Log.i("UpdateChecker", "Download completed, starting installation");
                     installApk();
                 }
             }
@@ -129,5 +151,19 @@ public class UpdateChecker {
         intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         context.startActivity(intent);
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (context.getPackageManager().canRequestPackageInstalls()) {
+                    startDownload(apkUrl);
+                } else {
+                    requestInstallPermission();
+                }
+            } else {
+                // Permission denied, handle as needed
+            }
+        }
     }
 }

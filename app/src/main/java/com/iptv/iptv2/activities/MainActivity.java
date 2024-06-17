@@ -3,11 +3,13 @@ package com.iptv.iptv2.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.dao.ChannelDao;
 import com.iptv.iptv2.dao.MovieDao;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ChannelDao channelDao;
     private MovieDao movieDao;
     private ShowDao showDao;
+    private UpdateChecker updateChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         btnShows.setOnClickListener(view -> navigateToCategory("Shows"));
         btnLiveTV.setOnClickListener(view -> navigateToCategory("Live TV"));
         settingsButton.setOnClickListener(view -> settings());
-        profileButton.setOnClickListener(view -> viewProfile());
         btnUpdate.setOnClickListener(view -> updateContent());
+        profileButton.setOnClickListener(view -> viewProfile());
 
         setFocusChangeListeners();
 
@@ -65,17 +68,20 @@ public class MainActivity extends AppCompatActivity {
         movieDao = MovieDao.getInstance(this);
         showDao = ShowDao.getInstance(this);
 
-        UpdateChecker updateChecker = new UpdateChecker(this);
+        updateChecker = new UpdateChecker(this);
         updateChecker.checkForUpdate();
 
         btnLiveTV.requestFocus();
 
         // List all tables in the database
         channelDao.listTables();
-        //movieDao.listTables();
-        //showDao.listTables();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        updateChecker.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     private void setFocusChangeListeners() {
         btnMovies.setOnFocusChangeListener((v, hasFocus) -> {
@@ -140,17 +146,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void settings(){
-        Intent intent;
-        intent = new Intent(MainActivity.this, SettingsActivity.class);
-        startActivity(intent);
-    }
-    private void viewProfile(){
-        Intent intent;
-        intent = new Intent(MainActivity.this, ProfileActivity.class);
+
+    private void settings() {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
+    private void viewProfile() {
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
     private void adjustButtonMargins(int buttonId, boolean expand) {
         ConstraintLayout layout = findViewById(R.id.constraintLayout);
@@ -205,74 +210,74 @@ public class MainActivity extends AppCompatActivity {
     private void updateContent() {
         executorService.submit(() -> {
             try {
-                Log.d(TAG, "Starting Update");
-                Log.d(TAG, "Clear previous databases");
+                Log.i(TAG, "Starting Update");
+                Log.i(TAG, "Clear previous databases");
                 // Clear existing data
                 channelDao.clearChannels();
                 movieDao.clearMovies();
                 showDao.clearShows();
 
                 // Update Live TV
-                Log.d(TAG, "Fetching Channels");
+                Log.i(TAG, "Fetching Channels");
                 String liveTvContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv");
 
                 // Print the first few lines of the M3U content
-                Log.d(TAG, "First few lines of M3U content:");
+                Log.i(TAG, "First few lines of M3U content:");
                 String[] lines = liveTvContent.split("\n");
                 for (int i = 0; i < Math.min(20, lines.length); i++) {
-                    Log.d(TAG, lines[i]);
+                    Log.i(TAG, lines[i]);
                 }
 
-                Log.d(TAG, "Parsing Channels");
+                Log.i(TAG, "Parsing Channels");
                 List<Channel> liveTvChannels = M3UParser.parseM3UForChannels(liveTvContent);
-                Log.d(TAG, "Inserting Channels into database");
+                Log.i(TAG, "Inserting Channels into database");
                 for (Channel channel : liveTvChannels) {
                     channelDao.insertChannel(channel);
                 }
-                Log.d(TAG, "Updated channels");
+                Log.i(TAG, "Updated channels");
                 for (int i = 0; i < Math.min(5, liveTvChannels.size()); i++) {
-                    Log.d(TAG, "Channel " + (i + 1) + ": " + liveTvChannels.get(i));
+                    Log.i(TAG, "Channel " + (i + 1) + ": " + liveTvChannels.get(i));
                 }
 
                 // Update Movies
-                Log.d(TAG, "Fetching Movies");
+                Log.i(TAG, "Fetching Movies");
                 String moviesContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/movies");
 
                 // Print the first few lines of the M3U content
-                Log.d(TAG, "First few lines of Movies M3U content:");
+                Log.i(TAG, "First few lines of Movies M3U content:");
                 lines = moviesContent.split("\n");
                 for (int i = 0; i < Math.min(20, lines.length); i++) {
-                    Log.d(TAG, lines[i]);
+                    Log.i(TAG, lines[i]);
                 }
 
-                Log.d(TAG, "Parsing Movies");
+                Log.i(TAG, "Parsing Movies");
                 List<Movie> movieChannels = M3UParser.parseM3UForMovies(moviesContent);
-                Log.d(TAG, "Inserting Movies into database");
+                Log.i(TAG, "Inserting Movies into database");
                 for (Movie movie : movieChannels) {
                     movieDao.insertMovie(movie);
                 }
-                Log.d(TAG, "Updated Movies");
+                Log.i(TAG, "Updated Movies");
 
                 // Update Shows
-                Log.d(TAG, "Fetching Shows");
+                Log.i(TAG, "Fetching Shows");
                 String showsContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/tvshows");
 
                 // Print the first few lines of the M3U content
-                Log.d(TAG, "First few lines of Shows M3U content:");
+                Log.i(TAG, "First few lines of Shows M3U content:");
                 lines = showsContent.split("\n");
                 for (int i = 0; i < Math.min(20, lines.length); i++) {
-                    Log.d(TAG, lines[i]);
+                    Log.i(TAG, lines[i]);
                 }
 
-                Log.d(TAG, "Parsing Shows");
+                Log.i(TAG, "Parsing Shows");
                 List<Show> showChannels = M3UParser.parseM3UForShows(showsContent);
-                Log.d(TAG, "Inserting Shows into database");
+                Log.i(TAG, "Inserting Shows into database");
                 for (Show show : showChannels) {
                     showDao.insertShow(show);
                 }
-                Log.d(TAG, "Updated shows");
+                Log.i(TAG, "Updated shows");
 
-                Log.d(TAG, "Update complete");
+                Log.i(TAG, "Update complete");
 
             } catch (Exception e) {
                 Log.e(TAG, "Error during update", e);
