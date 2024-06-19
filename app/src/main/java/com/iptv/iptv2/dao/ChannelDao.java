@@ -16,7 +16,7 @@ import java.util.List;
 public class ChannelDao extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String TABLE_CHANNELS = "channels";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";

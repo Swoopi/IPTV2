@@ -17,7 +17,7 @@ import java.util.List;
 public class MovieDao extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String TABLE_MOVIES = "movies";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";

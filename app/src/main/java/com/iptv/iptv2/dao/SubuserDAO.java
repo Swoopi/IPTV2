@@ -16,7 +16,7 @@ public class SubuserDAO extends SQLiteOpenHelper {
 
     private static final String TAG = "SubuserDAO";
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String TABLE_SUBUSERS = "subusers";
     private static final String COLUMN_ID = "id";
