@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (user != null) {
                     Log.d("LoginActivity", "LOGIN SUCCESSFUL");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, SubuserSelectionActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
