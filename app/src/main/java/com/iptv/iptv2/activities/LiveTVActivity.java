@@ -1,6 +1,5 @@
 package com.iptv.iptv2.activities;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,16 +8,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.iptv.iptv2.R;
-import com.iptv.iptv2.adapters.CategoryAdapter;
-import com.iptv.iptv2.adapters.ChannelAdapter;
+import com.iptv.iptv2.adapters.ChannelGroupAdapter;
 import com.iptv.iptv2.dao.ChannelDao;
 import com.iptv.iptv2.models.Channel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LiveTVActivity extends AppCompatActivity {
 
@@ -27,11 +26,10 @@ public class LiveTVActivity extends AppCompatActivity {
     private Button movieButton;
     private Button showsButton;
     private RecyclerView liveTvRecyclerView;
-    private RecyclerView categoriesRecyclerView;
     private ChannelDao channelDao;
-    private ChannelAdapter channelAdapter;
-    private CategoryAdapter categoryAdapter;
+    private ChannelGroupAdapter channelGroupAdapter;
     private List<Channel> channels;
+    private List<String> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +39,14 @@ public class LiveTVActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         searchEditText = findViewById(R.id.searchEditText);
         liveTvRecyclerView = findViewById(R.id.live_tv_recycler_view);
-        categoriesRecyclerView = findViewById(R.id.categories_recycler_view);
         movieButton = findViewById(R.id.movieButton);
         showsButton = findViewById(R.id.showsButton);
 
         channelDao = ChannelDao.getInstance(this);
         channels = channelDao.getAllChannels();
-        channelAdapter = new ChannelAdapter(this, channels);
+        categories = getCategoriesFromChannels(channels);
 
-        List<String> categories = getCategoriesFromChannels(channels);
-        categoryAdapter = new CategoryAdapter(this, categories, channelAdapter);
+        channelGroupAdapter = new ChannelGroupAdapter(this, groupChannelsByCategory(channels), categories);
 
         backButton.setOnClickListener(v -> finish());
 
@@ -61,16 +57,17 @@ public class LiveTVActivity extends AppCompatActivity {
                 backButton.setImageResource(R.drawable.back_icon);
             }
         });
+
         movieButton.setOnClickListener(v -> {
             Intent intent = new Intent(LiveTVActivity.this, MoviesActivity.class);
             startActivity(intent);
         });
+
         movieButton.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus){
                 movieButton.animate();
-            }
-            else {
-
+            } else {
+                // No action needed
             }
         });
 
@@ -78,6 +75,7 @@ public class LiveTVActivity extends AppCompatActivity {
             Intent intent = new Intent(LiveTVActivity.this, ShowsActivity.class);
             startActivity(intent);
         });
+
         setupRecyclerView();
         setupSearch();
     }
@@ -96,12 +94,36 @@ public class LiveTVActivity extends AppCompatActivity {
         return categories;
     }
 
-    private void setupRecyclerView() {
-        liveTvRecyclerView.setLayoutManager(new GridLayoutManager(this, 6)); // 6 columns
-        liveTvRecyclerView.setAdapter(channelAdapter);
+    private Map<String, List<Channel>> groupChannelsByCategory(List<Channel> channels) {
+        Map<String, List<Channel>> channelMap = new HashMap<>();
+        for (Channel channel : channels) {
+            if (channel.getCategories() != null) {
+                for (String category : channel.getCategories()) {
+                    if (!channelMap.containsKey(category)) {
+                        channelMap.put(category, new ArrayList<>());
+                    }
+                    channelMap.get(category).add(channel);
+                }
+            }
+        }
+        return channelMap;
+    }
 
-        categoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        categoriesRecyclerView.setAdapter(categoryAdapter);
+    private void setupRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        liveTvRecyclerView.setLayoutManager(layoutManager);
+        liveTvRecyclerView.setAdapter(channelGroupAdapter);
+
+        liveTvRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) { // check if scrolling down
+                    int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+                    recyclerView.findViewHolderForAdapterPosition(lastVisiblePosition).itemView.requestFocus();
+                }
+            }
+        });
     }
 
     private void setupSearch() {
@@ -114,7 +136,9 @@ public class LiveTVActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Filter channels as the user types
-                filterChannels(charSequence.toString());
+                if (i >= 3) {
+                    filterChannels(charSequence.toString());
+                }
             }
 
             @Override
@@ -131,6 +155,6 @@ public class LiveTVActivity extends AppCompatActivity {
                 filteredChannels.add(channel);
             }
         }
-        channelAdapter.updateChannels(filteredChannels);
+        channelGroupAdapter.updateChannels(groupChannelsByCategory(filteredChannels));
     }
 }

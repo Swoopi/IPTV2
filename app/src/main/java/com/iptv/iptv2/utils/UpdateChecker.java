@@ -66,6 +66,7 @@ public class UpdateChecker {
 
                 Log.i("UpdateChecker", "Current version code: " + currentVersionCode);
                 Log.i("UpdateChecker", "Latest version code: " + latestVersionCode);
+                Log.i("UpdateChecker", "Version JSON: " + result.toString());
 
                 if (latestVersionCode > currentVersionCode) {
                     showUpdateDialog();
@@ -123,6 +124,12 @@ public class UpdateChecker {
     }
 
     private void startDownload(String apkUrl) {
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "update.apk");
+        if (file.exists()) {
+            file.delete(); // Delete old APK if it exists
+            Log.i("UpdateChecker", "Old APK deleted.");
+        }
+
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
         request.setTitle("Downloading update...");
         request.setDescription("Please wait while the update is downloaded.");
@@ -146,6 +153,7 @@ public class UpdateChecker {
 
     private void installApk() {
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "update.apk");
+        Log.i("UpdateChecker", "APK file path: " + file.getAbsolutePath());
         Uri fileUri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
         Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
         intent.setDataAndType(fileUri, "application/vnd.android.package-archive");

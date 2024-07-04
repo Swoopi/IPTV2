@@ -18,8 +18,8 @@
 
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="31dp"
-        android:layout_height="33dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/back_button"
@@ -67,15 +67,17 @@
         android:id="@+id/movieButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
         android:background="@android:color/transparent"
+        android:defaultFocusHighlightEnabled="true"
+        android:focusable="auto"
         android:padding="5dp"
         android:text="Movies"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintEnd_toStartOf="@id/showsButton"
-        app:layout_constraintTop_toTopOf="@id/view"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toTopOf="@id/view" />
 
     <Button
         android:id="@+id/showsButton"
@@ -93,24 +95,12 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_recycler_view"
-        android:layout_width="189dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGrayDark"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view" />
-
-    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/live_tv_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/categories_recycler_view"
-        app:layout_constraintTop_toBottomOf="@id/view"
-        app:spanCount="6" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

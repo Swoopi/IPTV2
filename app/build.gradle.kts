@@ -10,10 +10,13 @@ android {
         applicationId = "com.iptv.iptv2"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField ("String", "LIVE_TV_M3U_URL", "\"https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv\"")
+        buildConfigField ("String", "MOVIES_M3U_URL", "\"https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/movies\"")
+        buildConfigField ("String", "SHOWS_M3U_URL", "\"https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/tvshows\"")
     }
 
     buildTypes {
@@ -23,11 +26,17 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField ("String", "LIVE_TV_M3U_URL", "\"https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv\"")
+            buildConfigField ("String", "MOVIES_M3U_URL", "\"https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/movies\"")
+            buildConfigField ("String", "SHOWS_M3U_URL", "\"https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/tvshows\"")
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

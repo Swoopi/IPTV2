@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.iptv.iptv2.BuildConfig;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.dao.ChannelDao;
 import com.iptv.iptv2.dao.MovieDao;
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void viewProfile() {
-        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        Intent intent = new Intent(MainActivity.this, SubuserSelectionActivity.class);
         startActivity(intent);
     }
 
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Update Live TV
                 Log.i(TAG, "Fetching Channels");
-                String liveTvContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/livetv");
+                String liveTvContent = M3UFetcher.fetchM3U(BuildConfig.LIVE_TV_M3U_URL);
 
                 // Print the first few lines of the M3U content
                 Log.i(TAG, "First few lines of M3U content:");
@@ -241,7 +242,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // Update Movies
                 Log.i(TAG, "Fetching Movies");
-                String moviesContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/movies");
+                String moviesContent = M3UFetcher.fetchM3U(BuildConfig.MOVIES_M3U_URL);
+                Log.i(TAG, "Raw Movies M3U content:");
+                Log.i(TAG, moviesContent);
 
                 // Print the first few lines of the M3U content
                 Log.i(TAG, "First few lines of Movies M3U content:");
@@ -260,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Update Shows
                 Log.i(TAG, "Fetching Shows");
-                String showsContent = M3UFetcher.fetchM3U("https://tvnow.best/api/list/couch0723@gmail.com/67745443/m3u8/tvshows");
+                String showsContent = M3UFetcher.fetchM3U(BuildConfig.SHOWS_M3U_URL);
 
                 // Print the first few lines of the M3U content
                 Log.i(TAG, "First few lines of Shows M3U content:");

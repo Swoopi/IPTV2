@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" package="com.iptv.iptv2">
-    >
+    package="com.iptv.iptv2">
+
 
     <!-- Required permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -53,12 +53,7 @@
             android:theme="@style/AppCompatTheme">
 
         </activity>
-        <activity android:name=".activities.ProfileActivity"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppCompatTheme">
 
-        </activity>
         <activity android:name=".activities.SubuserSelectionActivity"
             android:exported="true"
             android:screenOrientation="landscape"

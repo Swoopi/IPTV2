@@ -58,6 +58,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 holder.itemView.setBackgroundResource(R.drawable.channel_item_hover);
+                // Ensure the focus remains within the same row
+                if (position == channels.size() - 1) {
+                    holder.itemView.setNextFocusRightId(holder.itemView.getId());
+                }
             } else {
                 holder.itemView.setBackgroundResource(R.drawable.channel_item);
             }
