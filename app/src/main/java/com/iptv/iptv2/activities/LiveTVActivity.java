@@ -106,6 +106,12 @@ public class LiveTVActivity extends AppCompatActivity {
                 }
             }
         }
+        // Ensure every category has a non-null list
+        for (String category : categories) {
+            if (!channelMap.containsKey(category)) {
+                channelMap.put(category, new ArrayList<>());
+            }
+        }
         return channelMap;
     }
 
@@ -136,8 +142,11 @@ public class LiveTVActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Filter channels as the user types
-                if (i >= 3) {
+                if (charSequence.length() > 3) {
                     filterChannels(charSequence.toString());
+                } else {
+                    // If the query is less than 4 characters, show the original list
+                    channelGroupAdapter.updateChannels(groupChannelsByCategory(channels));
                 }
             }
 

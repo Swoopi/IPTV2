@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.activities.PlaybackActivity;
 import com.iptv.iptv2.models.Channel;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelViewHolder> {
@@ -22,7 +24,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
 
     public ChannelAdapter(Context context, List<Channel> channels) {
         this.context = context;
-        this.channels = channels;
+        this.channels = channels != null ? channels : new ArrayList<>(); // Initialize channels as an empty list if null
     }
 
     @NonNull
@@ -74,7 +76,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
     }
 
     public void updateChannels(List<Channel> newChannels) {
-        channels = newChannels;
+        channels = newChannels != null ? newChannels : new ArrayList<>(); // Ensure channels is never null
         notifyDataSetChanged();
     }
 
