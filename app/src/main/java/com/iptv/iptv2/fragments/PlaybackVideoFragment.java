@@ -2,23 +2,30 @@ package com.iptv.iptv2.fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
 import androidx.leanback.app.VideoSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
 import androidx.leanback.media.MediaPlayerAdapter;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.widget.PlaybackControlsRow;
-
 import com.iptv.iptv2.activities.PlaybackActivity;
 
 public class PlaybackVideoFragment extends VideoSupportFragment {
 
     private PlaybackTransportControlGlue<MediaPlayerAdapter> mTransportControlGlue;
+    private String channelUrl;
+    private String channelTitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String channelUrl = getActivity().getIntent().getStringExtra(PlaybackActivity.CHANNEL_URL);
+        if (getArguments() != null) {
+            channelUrl = getArguments().getString(PlaybackActivity.CHANNEL_URL);
+            channelTitle = getArguments().getString(PlaybackActivity.CHANNEL_TITLE);
+        }
 
         VideoSupportFragmentGlueHost glueHost = new VideoSupportFragmentGlueHost(this);
 
@@ -27,10 +34,15 @@ public class PlaybackVideoFragment extends VideoSupportFragment {
 
         mTransportControlGlue = new PlaybackTransportControlGlue<>(getContext(), playerAdapter);
         mTransportControlGlue.setHost(glueHost);
-        mTransportControlGlue.setTitle("Live Stream");
-        mTransportControlGlue.setSubtitle("Streaming live content");
+        mTransportControlGlue.setTitle(channelTitle);
         mTransportControlGlue.playWhenPrepared();
-        playerAdapter.setDataSource(Uri.parse(channelUrl));
+
+        if (channelUrl != null) {
+            playerAdapter.setDataSource(Uri.parse(channelUrl));
+        } else {
+            // Handle the case where the URL is not available
+            // Show an error message or perform an appropriate action
+        }
     }
 
     @Override

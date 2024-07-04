@@ -50,9 +50,10 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ChannelV
         }
 
         holder.itemView.setOnClickListener(v -> {
-            // Handle the click event, e.g., start PlaybackActivity with the channel URL
+            // Handle the click event, e.g., start PlaybackActivity with the channel URL and title
             Intent intent = new Intent(context, PlaybackActivity.class);
-            intent.putExtra("CHANNEL_URL", channel.getUrl());
+            intent.putExtra(PlaybackActivity.CHANNEL_URL, channel.getUrl());
+            intent.putExtra(PlaybackActivity.CHANNEL_TITLE, channel.getName());
             context.startActivity(intent);
         });
 
