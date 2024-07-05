@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <ImageView
         android:id="@+id/subuserImageView"
@@ -11,7 +13,10 @@
         android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
         android:src="@drawable/default_avatar"
-        android:layout_marginBottom="8dp"/>
+        android:padding="8dp"
+    android:background="@drawable/circle_outline_selector"
+    android:focusable="true"
+    android:focusableInTouchMode="true"/>
 
     <TextView
         android:id="@+id/subuserNameTextView"

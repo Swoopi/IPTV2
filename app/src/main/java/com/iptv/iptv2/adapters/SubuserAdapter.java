@@ -13,9 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.activities.MainActivity;
-import com.iptv.iptv2.activities.PlaybackActivity;
 import com.iptv.iptv2.models.Subuser;
-
 import java.util.List;
 
 public class SubuserAdapter extends RecyclerView.Adapter<SubuserAdapter.SubuserViewHolder> {
@@ -52,6 +50,14 @@ public class SubuserAdapter extends RecyclerView.Adapter<SubuserAdapter.SubuserV
             Intent intent = new Intent(context, MainActivity.class);
             intent.putExtra("SUBUSER_NAME", subuser.getName());
             context.startActivity(intent);
+        });
+
+        holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                holder.itemView.setBackgroundResource(R.drawable.circle_outline_selector);
+            } else {
+                holder.itemView.setBackgroundResource(0); // Remove the background
+            }
         });
     }
 

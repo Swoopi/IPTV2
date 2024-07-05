@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +22,7 @@ public class SubuserSelectionActivity extends AppCompatActivity {
 
     private static final String TAG = "SubuserSelectionActivity";
     private RecyclerView subuserRecyclerView;
-    private Button addSubuserButton;
+    private ImageButton addSubuserButton;
     private Button logoutButton;
     private SubuserDAO subuserDAO;
     private List<Subuser> subusers;
@@ -56,6 +57,14 @@ public class SubuserSelectionActivity extends AppCompatActivity {
             Intent intent = new Intent(SubuserSelectionActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        addSubuserButton.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                addSubuserButton.setImageResource(R.drawable.add_subuser_hover);
+            } else {
+                addSubuserButton.setImageResource(R.drawable.add_subuser);
+            }
         });
     }
 

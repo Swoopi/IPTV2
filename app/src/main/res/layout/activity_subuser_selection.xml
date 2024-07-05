@@ -20,11 +20,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/addSubuserButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Subuser"
+        android:src="@drawable/add_subuser"
+        android:background="@null"
+        android:contentDescription="Add Subuser"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
