@@ -1,84 +1,75 @@
 package com.iptv.iptv2.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.iptv.iptv2.R;
 import com.iptv.iptv2.adapters.SubuserAdapter;
 import com.iptv.iptv2.dao.SubuserDAO;
 import com.iptv.iptv2.models.Subuser;
-
-import java.util.ArrayList;
+import com.iptv.iptv2.utils.AppConstants;
 import java.util.List;
 
 public class SubuserSelectionActivity extends AppCompatActivity {
 
     private static final String TAG = "SubuserSelectionActivity";
-    private ListView subuserListView;
+    private RecyclerView subuserRecyclerView;
     private Button addSubuserButton;
+    private Button logoutButton;
     private SubuserDAO subuserDAO;
-    private ArrayList<String> subuserNames;
+    private List<Subuser> subusers;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subuser_selection);
 
-        subuserListView = findViewById(R.id.subuserListView);
+        subuserRecyclerView = findViewById(R.id.subuserRecyclerView);
         addSubuserButton = findViewById(R.id.addSubuserButton);
+        logoutButton = findViewById(R.id.logoutButton);
         subuserDAO = SubuserDAO.getInstance(this);
-        Log.i(TAG, "SubuserDAO initialized");
+        sharedPreferences = getSharedPreferences(AppConstants.PREFS_NAME, MODE_PRIVATE);
 
         loadSubusers();
 
-        // Set up click listener for the ListView
-        subuserListView.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedSubuser = subuserNames.get(position);
-            // Save the selected subuser to shared preferences or database
-            saveSelectedSubuser(selectedSubuser);
-            // Navigate to MainActivity
-            Intent intent = new Intent(SubuserSelectionActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-        // Set up click listener for the add subuser button
         addSubuserButton.setOnClickListener(v -> {
-            // Navigate to AddSubuserActivity
             Intent intent = new Intent(SubuserSelectionActivity.this, AddSubuserActivity.class);
             startActivity(intent);
+        });
+
+        logoutButton.setOnClickListener(v -> {
+            // Clear login state
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(AppConstants.KEY_IS_LOGGED_IN, false);
+            editor.remove(AppConstants.KEY_USERNAME);
+            editor.apply();
+
+            // Navigate back to LoginActivity
+            Intent intent = new Intent(SubuserSelectionActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
     private void loadSubusers() {
         try {
-            // Load subusers from the database
-            List<Subuser> subusers = subuserDAO.getAllSubusers();
-            subuserNames = new ArrayList<>();
-            for (Subuser subuser : subusers) {
-                subuserNames.add(subuser.getName());
-            }
+            subusers = subuserDAO.getAllSubusers();
+            Log.d(TAG, "Loaded subusers: " + subusers);
 
-            // Log the loaded subusers
-            Log.d(TAG, "Loaded subusers: " + subuserNames);
-
-            // Create an adapter for the ListView
-            SubuserAdapter adapter = new SubuserAdapter(this, subuserNames);
-            subuserListView.setAdapter(adapter);
+            SubuserAdapter adapter = new SubuserAdapter(this, subusers);
+            subuserRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            subuserRecyclerView.setAdapter(adapter);
 
         } catch (Exception e) {
             Log.e(TAG, "Error loading subusers", e);
             Toast.makeText(this, "Error loading subusers", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void saveSelectedSubuser(String subuser) {
-        // Save the selected subuser to shared preferences or database
     }
 }

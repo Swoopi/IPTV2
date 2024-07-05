@@ -14,7 +14,7 @@ import java.util.List;
 public class FavoriteDAO extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 4; // Updated version
+    private static final int DATABASE_VERSION = 5; // Updated version
     private static final String TABLE_FAVORITES = "favorites";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_SUBUSER_ID = "subuser_id";

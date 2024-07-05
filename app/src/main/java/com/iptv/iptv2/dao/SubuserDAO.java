@@ -16,11 +16,12 @@ public class SubuserDAO extends SQLiteOpenHelper {
 
     private static final String TAG = "SubuserDAO";
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5; // Incremented version
 
     private static final String TABLE_SUBUSERS = "subusers";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
+    private static final String COLUMN_IMAGE_URL = "imageUrl"; // New column
 
     private static SubuserDAO instance;
 
@@ -46,7 +47,8 @@ public class SubuserDAO extends SQLiteOpenHelper {
         Log.i(TAG, "Creating database");
         String CREATE_SUBUSERS_TABLE = "CREATE TABLE " + TABLE_SUBUSERS + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_NAME + " TEXT" + ")";
+                + COLUMN_NAME + " TEXT,"
+                + COLUMN_IMAGE_URL + " TEXT" + ")"; // Updated schema
         db.execSQL(CREATE_SUBUSERS_TABLE);
         Log.i(TAG, "Subusers table created");
     }
@@ -54,8 +56,9 @@ public class SubuserDAO extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBUSERS);
-        onCreate(db);
+        if (oldVersion < 5) {
+            db.execSQL("ALTER TABLE " + TABLE_SUBUSERS + " ADD COLUMN " + COLUMN_IMAGE_URL + " TEXT");
+        }
     }
 
     private static boolean isTableExists(SQLiteDatabase db, String tableName) {
@@ -69,6 +72,7 @@ public class SubuserDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, subuser.getName());
+        values.put(COLUMN_IMAGE_URL, subuser.getImageUrl()); // Updated
         db.insert(TABLE_SUBUSERS, null, values);
         db.close();
     }
@@ -81,7 +85,7 @@ public class SubuserDAO extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Subuser subuser = new Subuser(cursor.getInt(0), cursor.getString(1));
+                Subuser subuser = new Subuser(cursor.getInt(0), cursor.getString(1), cursor.getString(2)); // Updated
                 subusers.add(subuser);
             } while (cursor.moveToNext());
         }

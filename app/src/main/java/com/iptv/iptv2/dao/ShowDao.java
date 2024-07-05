@@ -19,7 +19,7 @@ import java.util.List;
 public class ShowDao extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "iptv.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String TABLE_SHOWS = "shows";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
