@@ -15,6 +15,7 @@ public class AddSubuserActivity extends AppCompatActivity {
     private static final String TAG = "AddSubuserActivity";
     private EditText subuserNameEditText;
     private Button saveSubuserButton;
+
     private SubuserDAO subuserDAO;
 
     @Override
