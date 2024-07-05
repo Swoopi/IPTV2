@@ -14,6 +14,7 @@ import com.iptv.iptv2.adapters.SubuserAdapter;
 import com.iptv.iptv2.dao.SubuserDAO;
 import com.iptv.iptv2.models.Subuser;
 import com.iptv.iptv2.utils.AppConstants;
+import com.iptv.iptv2.utils.CenteringLinearLayoutManager;
 import java.util.List;
 
 public class SubuserSelectionActivity extends AppCompatActivity {
@@ -64,7 +65,7 @@ public class SubuserSelectionActivity extends AppCompatActivity {
             Log.d(TAG, "Loaded subusers: " + subusers);
 
             SubuserAdapter adapter = new SubuserAdapter(this, subusers);
-            subuserRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            subuserRecyclerView.setLayoutManager(new CenteringLinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             subuserRecyclerView.setAdapter(adapter);
 
         } catch (Exception e) {
